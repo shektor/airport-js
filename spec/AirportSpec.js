@@ -1,10 +1,19 @@
 describe("Airport", function() {
   var plane;
+  var weather;
   var airport;
-  
+
   beforeEach(function() {
-    airport = new Airport();
+    // weather = {
+    //   isStormy: function() {
+    //     return null;
+    //   }
+    // };
+
+    weather = jasmine.createSpyObj('weather', ['isStormy']);
+    weather.isStormy = function(){return false};
     plane = jasmine.createSpy('plane');
+    airport = new Airport(weather);
   });
 
   it("starts with an empty hanger", function() {
@@ -15,6 +24,14 @@ describe("Airport", function() {
     it("can land a plane", function() {
       airport.land(plane);
       expect(airport._hanger).toContain(plane);
+    });
+    it("prevents landing when stormy", function() {
+      // spyOn(weather, 'isStormy').and.returnValue(true);
+      weather.isStormy = function(){return true};
+      console.log(weather.isStormy())
+      expect(function () {
+        airport.land(plane)
+        }).toThrow('Storm');
     });
   });
 

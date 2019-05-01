@@ -1,9 +1,14 @@
-var Airport = function () {
+var Airport = function (weather) {
   this._hanger = [];
+  this.weather = weather;
 };
 
 Airport.prototype.land = function (plane) {
-  this._hanger.push(plane);
+  if (this.weather.isStormy()) {
+    throw 'Storm';
+  } else {
+    this._hanger.push(plane);
+  };
 };
 
 Airport.prototype.takeOff = function (plane) {
